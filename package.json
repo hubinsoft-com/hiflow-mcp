@@ -1,0 +1,39 @@
+{
+  "name": "@hubinsoft/hiflow-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for HIFlow App - Project management, WBS, requirements, and more",
+  "type": "module",
+  "bin": {
+    "hiflow-mcp": "./build/index.js"
+  },
+  "main": "./build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "start": "node build/index.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "hiflow",
+    "project-management",
+    "claude"
+  ],
+  "author": "HubInSoft",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.7.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "build",
+    "README.md"
+  ]
+}
