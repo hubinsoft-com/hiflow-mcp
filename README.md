@@ -8,7 +8,7 @@ MCP (Model Context Protocol) server for **HIFlow App** - Project management, WBS
 
 ```bash
 claude mcp add hiflow -t stdio \
-  -e HIFLOW_API_BASE_URL=https://your-server:2825 \
+  -e HIFLOW_API_BASE_URL=https://app.hubinflow.ai \
   -e HIFLOW_MCP_USER=your-id \
   -e HIFLOW_MCP_PASS=your-pw \
   -- npx -y @hubinsoft/hiflow-mcp
@@ -18,7 +18,7 @@ claude mcp add hiflow -t stdio \
 
 ```bash
 claude mcp add hiflow -t stdio \
-  -e HIFLOW_API_BASE_URL=https://your-server:2825 \
+  -e HIFLOW_API_BASE_URL=https://app.hubinflow.ai \
   -e HIFLOW_MCP_USER=your-id \
   -e HIFLOW_MCP_PASS=your-pw \
   -- node /path/to/hiflow-mcp/build/index.js
@@ -28,7 +28,7 @@ claude mcp add hiflow -t stdio \
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `HIFLOW_API_BASE_URL` | No | `https://app.hubinflow.ai:2825` | HIFlow API server URL |
+| `HIFLOW_API_BASE_URL` | No | `https://app.hubinflow.ai` | HIFlow API server URL |
 | `HIFLOW_MCP_USER` | No | - | Auto-login user ID |
 | `HIFLOW_MCP_PASS` | No | - | Auto-login password |
 | `HIFLOW_API_TIMEOUT` | No | `15000` | API timeout in milliseconds |
