@@ -124,6 +124,17 @@ export class HIFlowApiClient {
     return this.jwtPost<ApiResponse>(`/api/Todo/Complete/${encodeURIComponent(id)}`, { Id: id, CompleteYn: completeYn });
   }
 
+  async exportTodoMarkdown(): Promise<string> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    const resp = await this.rawJwtRequest("GET", "/api/Todo/ExportMarkdown");
+    if (!resp.ok) {
+      const body = await resp.text();
+      throw new Error(`Export todo markdown failed: HTTP ${resp.status} - ${trimForError(body)}`);
+    }
+    return resp.text();
+  }
+
   // ──────────────────────── WBS ────────────────────────
 
   async getWbsList(withAddItems: boolean): Promise<WbsDto[]> {
@@ -206,6 +217,17 @@ export class HIFlowApiClient {
     await this.ensureAuthenticated();
     this.ensureProjectSelected();
     return this.jwtGet<SnapshotDto | null>(`/api/Wbs/Snapshot/${encodeURIComponent(id)}?version=${version}`);
+  }
+
+  async exportWbsMarkdown(): Promise<string> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    const resp = await this.rawJwtRequest("GET", "/api/Wbs/ExportMarkdown");
+    if (!resp.ok) {
+      const body = await resp.text();
+      throw new Error(`Export WBS markdown failed: HTTP ${resp.status} - ${trimForError(body)}`);
+    }
+    return resp.text();
   }
 
   // ──────────────────────── Requirements ────────────────────────
@@ -304,6 +326,17 @@ export class HIFlowApiClient {
     await this.ensureAuthenticated();
     this.ensureProjectSelected();
     return this.jwtDelete<ApiResponse>(`/api/ProcessDefine/${encodeURIComponent(id)}`);
+  }
+
+  async exportProcessDefineMarkdown(): Promise<string> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    const resp = await this.rawJwtRequest("GET", "/api/ProcessDefine/ExportMarkdown");
+    if (!resp.ok) {
+      const body = await resp.text();
+      throw new Error(`Export process define markdown failed: HTTP ${resp.status} - ${trimForError(body)}`);
+    }
+    return resp.text();
   }
 
   async convertReqToProcess(): Promise<ApiResponse> {
@@ -411,6 +444,17 @@ export class HIFlowApiClient {
     if (!resp.ok) {
       const body = await resp.text();
       throw new Error(`Export relation markdown failed: HTTP ${resp.status} - ${trimForError(body)}`);
+    }
+    return resp.text();
+  }
+
+  async exportDocumentMarkdown(): Promise<string> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    const resp = await this.rawJwtRequest("GET", "/api/Document/ExportMarkdown");
+    if (!resp.ok) {
+      const body = await resp.text();
+      throw new Error(`Export document markdown failed: HTTP ${resp.status} - ${trimForError(body)}`);
     }
     return resp.text();
   }

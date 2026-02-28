@@ -162,4 +162,18 @@ export function registerWbsTools(server: McpServer, api: HIFlowApiClient): void 
       }
     },
   );
+
+  server.tool(
+    "wbs_export_markdown",
+    "Export WBS as a Markdown document with hierarchical tree structure.",
+    {},
+    async () => {
+      try {
+        const markdown = await api.exportWbsMarkdown();
+        return { content: [{ type: "text" as const, text: markdown }] };
+      } catch (e: unknown) {
+        return { content: [{ type: "text" as const, text: `Error: ${(e as Error).message}` }], isError: true };
+      }
+    },
+  );
 }

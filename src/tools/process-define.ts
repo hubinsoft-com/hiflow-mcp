@@ -96,4 +96,18 @@ export function registerProcessDefineTools(server: McpServer, api: HIFlowApiClie
       }
     },
   );
+
+  server.tool(
+    "process_export_markdown",
+    "Export process definitions as a Markdown document with tree structure and related requirements/tables.",
+    {},
+    async () => {
+      try {
+        const markdown = await api.exportProcessDefineMarkdown();
+        return { content: [{ type: "text" as const, text: markdown }] };
+      } catch (e: unknown) {
+        return { content: [{ type: "text" as const, text: `Error: ${(e as Error).message}` }], isError: true };
+      }
+    },
+  );
 }

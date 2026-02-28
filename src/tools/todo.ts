@@ -79,4 +79,18 @@ export function registerTodoTools(server: McpServer, api: HIFlowApiClient): void
       }
     },
   );
+
+  server.tool(
+    "todo_export_markdown",
+    "Export all todos as a Markdown document grouped by WBS.",
+    {},
+    async () => {
+      try {
+        const markdown = await api.exportTodoMarkdown();
+        return { content: [{ type: "text" as const, text: markdown }] };
+      } catch (e: unknown) {
+        return { content: [{ type: "text" as const, text: `Error: ${(e as Error).message}` }], isError: true };
+      }
+    },
+  );
 }
