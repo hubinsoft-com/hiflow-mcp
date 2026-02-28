@@ -14,6 +14,7 @@ import { registerMeetingTools } from "./tools/meeting.js";
 import { registerResearchTools } from "./tools/research.js";
 import { registerUiuxTools } from "./tools/uiux.js";
 import { registerTableDefineTools } from "./tools/table-define.js";
+import { registerRelationTools } from "./tools/relation.js";
 
 async function main(): Promise<void> {
   const config = loadConfig();
@@ -35,6 +36,7 @@ async function main(): Promise<void> {
   registerResearchTools(server, apiClient);
   registerUiuxTools(server, apiClient);
   registerTableDefineTools(server, apiClient);
+  registerRelationTools(server, apiClient);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

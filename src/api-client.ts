@@ -402,6 +402,19 @@ export class HIFlowApiClient {
     return this.jwtDelete<ApiResponse>(`/api/Uiux/${encodeURIComponent(id)}`);
   }
 
+  // ──────────────────────── Relation ────────────────────────
+
+  async exportRelationMarkdown(): Promise<string> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    const resp = await this.rawJwtRequest("GET", "/api/Relation/ExportMarkdown");
+    if (!resp.ok) {
+      const body = await resp.text();
+      throw new Error(`Export relation markdown failed: HTTP ${resp.status} - ${trimForError(body)}`);
+    }
+    return resp.text();
+  }
+
   // ──────────────────────── TableDefine ────────────────────────
 
   async getTableDefineList(): Promise<TableDefineDto[]> {
