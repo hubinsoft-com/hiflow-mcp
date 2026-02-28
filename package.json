@@ -22,7 +22,6 @@
   "author": "HubInSoft",
   "license": "MIT",
   "dependencies": {
-    "@hubinsoft/hiflow-mcp": "^0.1.2",
     "@modelcontextprotocol/sdk": "^1.7.0",
     "zod": "^3.25.0"
   },
