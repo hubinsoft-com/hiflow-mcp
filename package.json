@@ -1,6 +1,6 @@
 {
   "name": "@hubinsoft/hiflow-mcp",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "MCP server for HIFlow App - Project management, WBS, requirements, and more",
   "type": "module",
   "bin": {
