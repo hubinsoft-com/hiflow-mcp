@@ -237,3 +237,39 @@ export interface SnapshotDto {
   snapshotIdx?: number;
   [key: string]: unknown;
 }
+
+// ── Source Power Tool ──
+export interface SourcePowertoolDto {
+  id?: string;
+  projectId?: string;
+  name?: string;
+  dbType?: string;
+  dbHost?: string;
+  dbPort?: number;
+  dbUser?: string;
+  dbPassword?: string;
+  dbName?: string;
+  outputType?: string;
+  templateYn?: string;
+  [key: string]: unknown;
+}
+
+export interface SourceGeneratedFile {
+  name: string;
+  source: string;
+}
+
+// ── Knowledge Base ──
+export interface KbDto {
+  id?: string;
+  name?: string;
+  [key: string]: unknown;
+}
+
+export interface KbQueryResult {
+  data?: {
+    answer?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}

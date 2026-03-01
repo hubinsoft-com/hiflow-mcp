@@ -1,9 +1,15 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-02-28T02:52:19.306Z",
-  "activeFeatures": [],
-  "primaryFeature": null,
-  "features": {},
+  "lastUpdated": "2026-02-28T06:30:00.000Z",
+  "activeFeatures": ["source-powertool-mcp"],
+  "primaryFeature": "source-powertool-mcp",
+  "features": {
+    "source-powertool-mcp": {
+      "phase": "plan",
+      "planPath": "docs/01-plan/features/source-powertool-mcp.plan.md",
+      "startedAt": "2026-02-28T06:30:00.000Z"
+    }
+  },
   "pipeline": {
     "currentPhase": 1,
     "level": "Dynamic",
@@ -12,7 +18,7 @@
   "session": {
     "startedAt": "2026-02-28T02:52:19.306Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-02-28T02:52:19.306Z"
+    "lastActivity": "2026-02-28T06:30:00.000Z"
   },
   "history": []
 }

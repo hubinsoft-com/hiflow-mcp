@@ -164,6 +164,51 @@ export function registerWbsTools(server: McpServer, api: HIFlowApiClient): void 
   );
 
   server.tool(
+    "wbs_snapshot_idx",
+    "Get available WBS snapshot versions.",
+    {},
+    async () => {
+      try {
+        const versions = await api.getWbsSnapshotIdx();
+        return { content: [{ type: "text" as const, text: JSON.stringify({ count: versions.length, versions }) }] };
+      } catch (e: unknown) {
+        return { content: [{ type: "text" as const, text: `Error: ${(e as Error).message}` }], isError: true };
+      }
+    },
+  );
+
+  server.tool(
+    "wbs_snapshot_list",
+    "Get WBS snapshot list by version.",
+    { version: z.number().int().describe("Snapshot version number") },
+    async ({ version }) => {
+      try {
+        const items = await api.getWbsSnapshotList(version);
+        return { content: [{ type: "text" as const, text: JSON.stringify({ version, count: items.length, items }) }] };
+      } catch (e: unknown) {
+        return { content: [{ type: "text" as const, text: `Error: ${(e as Error).message}` }], isError: true };
+      }
+    },
+  );
+
+  server.tool(
+    "wbs_snapshot_get",
+    "Get WBS snapshot item by id and version.",
+    {
+      id: z.string().describe("WBS item ID"),
+      version: z.number().int().describe("Snapshot version number"),
+    },
+    async ({ id, version }) => {
+      try {
+        const item = await api.getWbsSnapshotInfo(id, version);
+        return { content: [{ type: "text" as const, text: item ? JSON.stringify(item) : "Snapshot item not found" }] };
+      } catch (e: unknown) {
+        return { content: [{ type: "text" as const, text: `Error: ${(e as Error).message}` }], isError: true };
+      }
+    },
+  );
+
+  server.tool(
     "wbs_export_markdown",
     "Export WBS as a Markdown document with hierarchical tree structure.",
     {},

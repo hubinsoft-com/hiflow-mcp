@@ -21,6 +21,10 @@ import type {
   TableDefineDto,
   TreeItem,
   SnapshotDto,
+  SourcePowertoolDto,
+  SourceGeneratedFile,
+  KbDto,
+  KbQueryResult,
 } from "./types.js";
 
 export class HIFlowApiClient {
@@ -483,6 +487,122 @@ export class HIFlowApiClient {
     await this.ensureAuthenticated();
     this.ensureProjectSelected();
     return this.jwtDelete<ApiResponse>(`/api/TableDefine/${encodeURIComponent(id)}`);
+  }
+
+  // ──────────────────────── Source Power Tool ────────────────────────
+
+  async getSourceList(): Promise<SourcePowertoolDto[]> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    return this.jwtGet<SourcePowertoolDto[]>("/api/SourcePowertool");
+  }
+
+  async getSource(id: string): Promise<SourcePowertoolDto | null> {
+    await this.ensureAuthenticated();
+    return this.jwtGet<SourcePowertoolDto | null>(`/api/SourcePowertool/${encodeURIComponent(id)}`);
+  }
+
+  async getSourceTables(id: string): Promise<string[]> {
+    await this.ensureAuthenticated();
+    return this.jwtGet<string[]>(`/api/SourcePowertool/Table/${encodeURIComponent(id)}`);
+  }
+
+  async getSourceTableSchema(id: string, table: string): Promise<unknown> {
+    await this.ensureAuthenticated();
+    return this.jwtGet<unknown>(`/api/SourcePowertool/Schema/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}`);
+  }
+
+  async generateSource(id: string, table: string, outputType: string): Promise<unknown> {
+    await this.ensureAuthenticated();
+
+    let endpoint: string;
+    switch (outputType) {
+      case "Java":
+        endpoint = `/api/SourcePowertool/Java/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}`;
+        break;
+      case "Aspnet":
+        endpoint = `/api/SourcePowertool/Aspnet/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}`;
+        break;
+      case "WPF_API":
+        endpoint = `/api/SourcePowertool/Wpf/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}&type=Api`;
+        break;
+      case "WPF_DB":
+        endpoint = `/api/SourcePowertool/Wpf/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}&type=Db`;
+        break;
+      case "WPF_JSON":
+        endpoint = `/api/SourcePowertool/Wpf/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}&type=Json`;
+        break;
+      case "Template":
+        endpoint = `/api/SourcePowertool/Template/${encodeURIComponent(id)}?table=${encodeURIComponent(table)}`;
+        break;
+      default:
+        throw new Error(`Invalid outputType: ${outputType}. Use: Java, Aspnet, WPF_API, WPF_DB, WPF_JSON, Template`);
+    }
+
+    return this.jwtGet<unknown>(endpoint);
+  }
+
+  async generateSourceDbContext(id: string): Promise<string> {
+    await this.ensureAuthenticated();
+    const resp = await this.rawJwtRequest("GET", `/api/SourcePowertool/AspnetDbContext/${encodeURIComponent(id)}`);
+    if (!resp.ok) {
+      const body = await resp.text();
+      throw new Error(`Source DbContext generate failed: HTTP ${resp.status} - ${trimForError(body)}`);
+    }
+    return resp.text();
+  }
+
+  async resolveOutputType(id: string): Promise<string> {
+    const conn = await this.getSource(id);
+    if (!conn) return "Aspnet";
+
+    if (conn.templateYn === "Y") return "Template";
+
+    switch (conn.outputType) {
+      case "Java": return "Java";
+      case "Asp.net Core": return "Aspnet";
+      case "WPF API": return "WPF_API";
+      case "WPF DB": return "WPF_DB";
+      case "WPF JSON": return "WPF_JSON";
+      default: return "Aspnet";
+    }
+  }
+
+  async getSourceTemplateList(): Promise<unknown[]> {
+    await this.ensureAuthenticated();
+    this.ensureProjectSelected();
+    return this.jwtGet<unknown[]>("/api/SourcePowertoolTemplate");
+  }
+
+  async getSourceTemplate(id: string): Promise<unknown> {
+    await this.ensureAuthenticated();
+
+    const template = await this.jwtGet<Record<string, unknown>>(`/api/SourcePowertoolTemplate/${encodeURIComponent(id)}`);
+    const details = await this.jwtGet<unknown[]>(`/api/SourcePowertoolTemplate/DetailList/${encodeURIComponent(id)}`);
+
+    return {
+      id: template.id,
+      title: template.title,
+      language: template.language,
+      files: details,
+    };
+  }
+
+  // ──────────────────────── Knowledge Base ────────────────────────
+
+  async getKbList(): Promise<KbDto[]> {
+    await this.ensureAuthenticated();
+    return this.jwtGet<KbDto[]>("/api/kb");
+  }
+
+  async queryKb(query: string): Promise<KbQueryResult> {
+    await this.ensureAuthenticated();
+    return this.jwtPost<KbQueryResult>("/api/kb/chat-query", { query });
+  }
+
+  async getKbInfo(kbId: string): Promise<unknown> {
+    await this.ensureAuthenticated();
+    return this.jwtGet<unknown>(`/api/kb/${encodeURIComponent(kbId)}`);
   }
 
   // ──────────────────────── Internal HTTP helpers ────────────────────────
